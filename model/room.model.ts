@@ -1,0 +1,16 @@
+import mongoose, { Schema } from 'mongoose';
+
+
+const RoomSchema = new Schema({
+    category: { type: String, required: true },
+    amenities: [{ type: String, required: true }],
+    price: { type: Number, required: true },
+    discount: { type: Number, required: true },
+    image: { type: String, required: true },
+    images: [{ type: String, required: true }],
+    status : { type: String, required: true },
+    maintenance : { type: String },
+    housekeeping : [{ type: String, required: true }],
+});
+
+export default mongoose.model('Rooms', RoomSchema)
