@@ -4,6 +4,7 @@ import { upload } from "../utils/upload";
 
 const route = Router()
 
+route.get("/:id", RoomController.getRoom)
 route.get("/", RoomController.getAllRooms)
 route.post("/", upload.single("image"), RoomController.createRoom)
 route.put("/", RoomController.updateRoom)

@@ -11,6 +11,12 @@ export class RoomController {
     response.send(rooms)
   }
 
+  static getRoom = async (request : AuthRequest , response : Response) => {
+    const {id} = request.params
+    const room = await RoomService.get(id)
+    response.send(room)
+  }
+
   static createRoom = async (request : AuthRequest , response : Response) => {
     try {
 

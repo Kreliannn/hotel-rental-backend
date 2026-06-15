@@ -8,6 +8,11 @@ export class RoomService {
     return rooms
   }
 
+  static async get( id : string) {
+    const rooms = RoomModel.findById(id);
+    return rooms
+  }
+
   static async create(data : roomInterfaceInput) {
     await RoomModel.create(data)
   }
