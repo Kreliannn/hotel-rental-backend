@@ -21,6 +21,10 @@ export class RoomService {
     await RoomModel.findByIdAndUpdate(id, data);
   }
 
+  static async updateStatus(id : string, status : string) {
+    await RoomModel.findByIdAndUpdate(id, {status});
+  }
+
   static async delete(id : string) {
     const room = RoomModel.findByIdAndDelete(id);
     return room

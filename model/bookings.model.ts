@@ -5,6 +5,7 @@ const BookingsSchema = new Schema({
     clientName: { type: String, required: true },
     clientAddress: { type: String, required: true },
     type: { type: String, required: true },
+    status: { type: String, required: true },
     arivalDate: { type: String, required: true },
     arivalTime: { type: String, required: true },
     room: {
@@ -14,4 +15,4 @@ const BookingsSchema = new Schema({
     }
 });
 
-export default mongoose.model('Bookingss', BookingsSchema)
+export default mongoose.model('Bookings', BookingsSchema)
