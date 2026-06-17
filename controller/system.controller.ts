@@ -1,43 +1,63 @@
 import { Response } from "express";
 import { AuthRequest } from "../types/request.type";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { Paymentservice } from "../services/payment.service";
+import { SystemService } from "../services/system.service";
+import { uploadToCloudinary } from "../utils/cloudinaryUpload";
 
 export class SystemController {
+
+   static getAllPayments = async (request : AuthRequest , response : Response) => {
+      const payments = await Paymentservice.getAll()
+      response.send(payments)
+    }
+
+    static getSystemInfo = async (request : AuthRequest , response : Response) => {
+      const systemInfo = await SystemService.get()
+      response.send(systemInfo)
+    }
+
+   static updateSystemInfo = async (request: AuthRequest, response: Response) => {
+    try {
+      const { systemInfo, paymentMin, systemName, header, description } = request.body
+      const system = await SystemService.update({ systemInfo, paymentMin, systemName, header, description })
+      response.send(system)
+    } catch (error) {
+      console.log("Failed to update system info: " + (error as Error).message)
+      response.status(500).send("Failed to update system info: " + (error as Error).message)
+    }
+  }
+
+  static uploadLogo = async (request: AuthRequest, response: Response) => {
+    try {
+      if (!request.file) {
+        response.status(400).send("No logo image provided")
+        return
+      }
+
+      const logoUrl = await uploadToCloudinary(request.file.path, "system")
+      const system = await SystemService.updateLogo(logoUrl)
+
+      response.send(system)
+    } catch (error) {
+      console.log("Failed to upload logo: " + (error as Error).message)
+      response.status(500).send("Failed to upload logo: " + (error as Error).message)
+    }
+  }
 
   static aiChatBot = async (request: AuthRequest, response: Response) => {
     try {
       const { input, convo } = request.body;
 
+      const systeminfo = await SystemService.get()
+
       const genAI = new GoogleGenerativeAI("AIzaSyDFT-V5HfM3oye1Y_jXroTN3wYm3IVXoqU");
 
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
       
-      const systemInfo = `
-        You are an AI assistant for a hotel room management business.
-
-        Business Information:
-        - Location: Trece Martires
-        - Total Rooms: 10
-        - Open Time: 7:00 AM
-        - Close Time: 9:00 PM
-
-        Rules:
-        1. Only answer questions related to the hotel business.
-        2. Examples:
-        - Room availability
-        - Reservations
-        - Check-in / Check-out
-        - Business hours
-        - Location
-        - Hotel services
-        - Room information
-        3. If the question is NOT related to the hotel business, respond EXACTLY with:
-        "Sorry, I only answer business-related questions."
-        4. Keep answers concise and helpful.
-      `;
-
+  
       const prompt = `
-            ${systemInfo}
+            ${systeminfo?.systemInfo}
 
             Previous Conversation:
             ${Array.isArray(convo) ? convo.join("\n") : ""}

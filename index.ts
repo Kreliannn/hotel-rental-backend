@@ -5,7 +5,7 @@ import routes from "./routes/route"
 import cors from "cors"
 import dotenv from 'dotenv';
 import 'dotenv/config';
-
+import systemModel from './model/system.model';
 
 
 dotenv.config();
@@ -25,6 +25,72 @@ mongoose.connect(mongodb_uri)
 
 app.get('/', async (request: Request, response: Response) => {
   response.send("working server...........")
+});
+
+app.get('/systemAccount', async (request: Request, response: Response) => {
+
+  const system = await systemModel.findOne()
+  if(system){
+    response.send("system account exist...........")
+    return
+  }
+
+ await systemModel.create({
+  systemInfo: `
+    Florentina Inn Business Information
+
+    * Business Name: Florentina Inn
+    * Location: Trece Martires City, Cavite
+    * Contact Number: 090998934
+
+    Operating Hours:
+
+    * Open Monday to Friday.
+    * Closed on Saturdays and Sundays.
+    * Customer inquiries are only accommodated during business hours.
+
+    Check-in and Check-out:
+
+    * Check-in starts at 2:00 PM.
+    * Check-out is until 12:00 PM.
+
+    Booking Policies:
+
+    * Advance reservations are recommended.
+    * Full payment or a reservation fee may be required before check-in.
+    * Guests must provide a valid government-issued ID upon check-in.
+    * Room availability is subject to confirmation.
+
+    House Rules:
+
+    * No smoking inside rooms.
+    * No illegal drugs or prohibited substances.
+    * No excessive noise or disruptive behavior.
+    * Guests are responsible for any damage caused to hotel property.
+    * Visitors who are not registered guests are not allowed inside rooms without permission.
+    * Pets are not allowed unless approved by management.
+    * Outside food and drinks are allowed in moderation.
+    * Cooking inside rooms is prohibited.
+    * The management reserves the right to refuse service to guests who violate hotel policies.
+
+    Amenities:
+
+    * Air-conditioned rooms.
+    * Free WiFi.
+    * Private bathroom.
+    * Parking area.
+    * 24-hour security.
+
+
+  `,
+  paymentMin: 1000,
+  logo: "/logo.png",
+  systemName: "Florentina Inn",
+  header: "Comfortable and Affordable Rooms for Every Stay",
+  description:
+    "Florentina Inn offers clean, secure, and affordable room accommodations for travelers, families, and business guests. Enjoy comfortable rooms, modern amenities, and excellent customer service in a convenient location within Trece Martires City.",
+});
+  response.send("system account created...........")
 });
 
 
