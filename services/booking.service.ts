@@ -14,7 +14,7 @@ export class BookingService {
   }
 
   static async create(data: bookingInterfaceInput) {
-    await BookingsModel.create(data)
+    return await BookingsModel.create(data)
   }
 
   static async update(id: string, data: bookingInterfaceInput) {

@@ -2,6 +2,10 @@ import { Response, response } from "express";
 import { AuthRequest } from "../types/request.type";
 import { accountInterface, accountInterfaceInput } from "../types/accounts.type";
 import { AccountService } from "../services/acccount.service";
+import jwt from "jsonwebtoken";
+
+const secret = process.env.JWT_SECRET || "defaultsecret";
+
 
 export class AccountController {
 
@@ -23,7 +27,10 @@ export class AccountController {
         response.status(500).send("user not found")
         return
     }
-    response.send(account)
+
+    const token = jwt.sign({ id: account._id }, secret, { expiresIn: "3d" });
+
+    response.send({account , token});
   }
 
   static getAccounts = async (request : AuthRequest , response : Response) => {
