@@ -25,6 +25,18 @@ export class RoomService {
     await RoomModel.findByIdAndUpdate(id, {status});
   }
 
+  static async toggleMaintenance(id: string) {
+    const room = await RoomModel.findById(id);
+    if (!room) throw new Error("Room not found");
+    const newStatus = room.status === "maintenance" ? "available" : "maintenance";
+    await RoomModel.findByIdAndUpdate(id, { status: newStatus });
+    return newStatus;
+  }
+
+  static async updateDiscount(id: string, discount: number) {
+    await RoomModel.findByIdAndUpdate(id, { discount });
+  }
+
   static async delete(id : string) {
     const room = RoomModel.findByIdAndDelete(id);
     return room

@@ -30,4 +30,13 @@ export class BookingService {
     return booking
   }
 
+  static async deleteByRoom(roomId: string) {
+    const booking =  await BookingsModel.deleteMany({
+        room: roomId
+    });;
+    return booking
+  }
+
+ 
+
 }

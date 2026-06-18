@@ -11,5 +11,7 @@ route.post("/",upload.single("image"), RoomController.createRoom)
 route.put("/", RoomController.updateRoom)
 route.delete("/", RoomController.deleteRoom)
 route.post("/images",  upload.array("images", 10), RoomController.uploadRoomImages)
+route.patch("/maintenance", RoomController.toggleMaintenance)
+route.patch("/discount", RoomController.updateDiscount)
 
 export default route

@@ -3,6 +3,7 @@ import { AuthRequest } from "../types/request.type";
 import { roomInterfaceInput } from "../types/room.type";
 import { RoomService } from "../services/room.service";
 import { uploadToCloudinary, uploadMultipleToCloudinary } from "../utils/cloudinaryUpload";
+import { BookingService } from "../services/booking.service";
 
 export class RoomController {
 
@@ -71,9 +72,34 @@ export class RoomController {
   static deleteRoom = async (request : AuthRequest , response : Response) => {
     const { _id } = request.body
     await RoomService.delete(_id)
+    await BookingService.deleteByRoom(_id)
     const rooms = await RoomService.getAll()
     response.send(rooms)
   }
+
+  static toggleMaintenance = async (request: AuthRequest, response: Response) => {
+    try {
+      const { _id } = request.body;
+      const newStatus = await RoomService.toggleMaintenance(_id);
+      const rooms = await RoomService.getAll();
+      response.send(rooms);
+    } catch (error) {
+      console.log("Failed to toggle maintenance: " + (error as Error).message);
+      response.status(500).send("Failed to toggle maintenance: " + (error as Error).message);
+    }
+  };
+
+  static updateDiscount = async (request: AuthRequest, response: Response) => {
+    try {
+      const { _id, discount } = request.body;
+      await RoomService.updateDiscount(_id, Number(discount));
+      const rooms = await RoomService.getAll();
+      response.send(rooms);
+    } catch (error) {
+      console.log("Failed to update discount: " + (error as Error).message);
+      response.status(500).send("Failed to update discount: " + (error as Error).message);
+    }
+  };
 
   static uploadRoomImages = async (request : AuthRequest , response : Response) => {
     try {
