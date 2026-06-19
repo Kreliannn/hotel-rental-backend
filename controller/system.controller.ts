@@ -4,6 +4,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Paymentservice } from "../services/payment.service";
 import { SystemService } from "../services/system.service";
 import { uploadToCloudinary } from "../utils/cloudinaryUpload";
+import { RoomService } from "../services/room.service";
 
 export class SystemController {
 
@@ -54,6 +55,9 @@ export class SystemController {
       const genAI = new GoogleGenerativeAI("AIzaSyDFT-V5HfM3oye1Y_jXroTN3wYm3IVXoqU");
 
       const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+
+     
       
   
       const prompt = `
