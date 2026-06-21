@@ -2,6 +2,8 @@ import { Response } from "express";
 import { AuthRequest } from "../types/request.type";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Paymentservice } from "../services/payment.service";
+import { ChatService } from "../services/chat.service";
+
 import { SystemService } from "../services/system.service";
 import { uploadToCloudinary } from "../utils/cloudinaryUpload";
 import { RoomService } from "../services/room.service";
@@ -84,4 +86,55 @@ export class SystemController {
       });
     }
   };
+
+  static getAllChats = async (request: AuthRequest, response: Response) => {
+    try {
+      const chats = await ChatService.getAll()
+      response.send(chats)
+    } catch (error) {
+      console.log("Failed to get chats: " + (error as Error).message)
+      response.status(500).send("Failed to get chats: " + (error as Error).message)
+    }
+  }
+
+  static getChat = async (request: AuthRequest, response: Response) => {
+    try {
+      const { id } = request.params
+      const chat = await ChatService.get(id)
+      if (!chat) {
+        response.status(404).send("Chat not found")
+        return
+      }
+      response.send(chat)
+    } catch (error) {
+      console.log("Failed to get chat: " + (error as Error).message)
+      response.status(500).send("Failed to get chat: " + (error as Error).message)
+    }
+  }
+
+  static createChat = async (request: AuthRequest, response: Response) => {
+    try {
+      const { clientName } = request.body
+      const chat = await ChatService.create(clientName)
+      response.send(chat)
+    } catch (error) {
+      console.log("Failed to create chat: " + (error as Error).message)
+      response.status(500).send("Failed to create chat: " + (error as Error).message)
+    }
+  }
+
+  static sendChatMessage = async (request: AuthRequest, response: Response) => {
+    try {
+      const { id, user, message } = request.body
+      const chat = await ChatService.sendMessage(id, user, message)
+      if (!chat) {
+        response.status(404).send("Chat not found")
+        return
+      }
+      response.send(chat)
+    } catch (error) {
+      console.log("Failed to send message: " + (error as Error).message)
+      response.status(500).send("Failed to send message: " + (error as Error).message)
+    }
+  }
 }
