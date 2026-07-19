@@ -37,4 +37,11 @@ export class AccountService {
     return account
   }
 
+  static async changeCredentials(id: string, data: { username?: string; password?: string }) {
+    const updateData: Record<string, string> = {};
+    if (data.username) updateData.username = data.username;
+    if (data.password) updateData.password = data.password;
+    await AccountModel.findByIdAndUpdate(id, updateData);
+  }
+
 }

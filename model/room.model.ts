@@ -11,6 +11,7 @@ const RoomSchema = new Schema({
     images: [{ type: String, required: true }],
     status : { type: String, required: true },
     maintenance : { type: String },
+    maxHead : { type: Number, required: true },
     housekeeping : [{ type: String, required: true }],
 });
 

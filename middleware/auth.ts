@@ -7,7 +7,7 @@ import { accountInterface } from "../types/accounts.type";
 
 dotenv.config();
 
-const secret = process.env.JWT_SECRET || "defaultsecret";
+const secret = "management"
 
 
 
@@ -22,12 +22,13 @@ export const authenticateJWT = async (request: AuthRequest, response: Response, 
 
   const token = authHeader.split(" ")[1];
 
+  console.log("token", token)
+
   try {
     const decoded = jwt.verify(token, secret);
     const { id } = decoded as { id: string };
     const accountDoc = await AccountService.get(id);
-
- 
+    
     if (accountDoc) {
       const account: accountInterface = {
         _id: accountDoc._id.toString(),
@@ -44,3 +45,6 @@ export const authenticateJWT = async (request: AuthRequest, response: Response, 
      response.status(401).json({ message: "Invalid token" });
   }
 };
+
+
+

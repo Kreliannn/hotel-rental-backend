@@ -9,6 +9,7 @@ export interface roomInterfaceInput {
     status: string,
     maintenance: string,
     housekeeping: string[],
+    maxHead : number
 }
 
 export interface roomInterface extends roomInterfaceInput {

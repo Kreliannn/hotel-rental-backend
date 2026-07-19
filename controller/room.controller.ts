@@ -35,6 +35,7 @@ export class RoomController {
           ? JSON.parse(request.body.amenities)
           : request.body.amenities || [],
         price: Number(request.body.price),
+        maxHead : request.body.maxHead,
         discount: Number(request.body.discount),
         image: imageUrl || request.body.image,
         description: request.body.description,
@@ -59,8 +60,8 @@ export class RoomController {
 
   static updateRoom = async (request : AuthRequest , response : Response) => {
     try {
-      const { _id, category, amenities, price, discount, image, description, images, status, maintenance, housekeeping } = request.body
-      await RoomService.update(_id, { category, amenities, price: Number(price), discount: Number(discount), image, description, images, status, maintenance, housekeeping })
+      const { _id, category, amenities, price, discount, image, description, images, status, maintenance, housekeeping , maxHead} = request.body
+      await RoomService.update(_id, { category, amenities, price: Number(price), discount: Number(discount), image, description, images, status, maintenance, housekeeping ,  maxHead})
       const rooms = await RoomService.getAll()
       response.send(rooms)
     } catch (error) {

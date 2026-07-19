@@ -8,6 +8,7 @@ route.post("/", AccountController.createAccount)
 route.post("/login", AccountController.login)
 route.get("/", AccountController.getAccounts)
 route.put("/", AccountController.updateAccount)
+route.put("/change-credentials", authenticateJWT, AccountController.changeCredentials)
 route.delete("/", AccountController.deleteAccount)
 
 export default route
